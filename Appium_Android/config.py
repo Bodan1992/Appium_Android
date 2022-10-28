@@ -1,4 +1,3 @@
-
 import os
 import pydantic
 from appium.options.android import UiAutomator2Options
@@ -8,7 +7,6 @@ from typing_extensions import Literal
 from Appium_Android.util import file
 
 
-load_dotenv()
 EnvContext = Literal['browserstack', 'emulation']
 
 USER = os.getenv('LOGIN')
@@ -32,6 +30,10 @@ class Settings(pydantic.BaseSettings):
     udid: Optional[str] = None
     remote_url = f"http://{USER}:{KEY}@{APPIUM_BROWSERSTACK}/wd/hub"
     timeout: float = 6.0
+
+    @property
+    def run_on_browserstack(self):
+        return 'hub.browserstack.com' in self.remote_url
 
     @property
     def driver_options(self):

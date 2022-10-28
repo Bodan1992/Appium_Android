@@ -5,17 +5,6 @@ from selene import support
 from appium import webdriver
 from Appium_Android import config
 from Appium_Android.util import attachment
-from dotenv import load_dotenv
-
-
-@pytest.fixture(scope='session', autouse=True)
-def auto_env():
-    load_dotenv()
-
-
-@pytest.fixture(scope='function', autouse=True)
-def attach_video():
-    yield
 
 
 @pytest.fixture(scope='function', autouse=True)
@@ -33,7 +22,8 @@ def create_driver(request):
 
     session_id = browser.driver.session_id
 
-    attachment.add_video(session_id, 'Video test')
+    if config.settings.run_on_browserstack:
+        attachment.add_video(session_id, 'Video test')
 
     attachment.screenshot(name='Last screenshot')
     attachment.screen_xml_dump()
